@@ -35,6 +35,10 @@ public class StorageService {
         return searchableProductsAndArticles;
     }
 
+    public Optional<Product> getProductById(UUID id) {
+        return Optional.ofNullable(productMap.get(id));
+    }
+
     private void initializeProductsAndArticles() {
         SimpleProduct product1 = new SimpleProduct("Масло", 100);
         FixPriceProduct product2 = new FixPriceProduct("Хлеб");
