@@ -1,15 +1,16 @@
 package org.skypro.skyshop.model.exceptions;
 
-public class NoSuchProductException extends RuntimeException{
-    private final String message = "Такой товар не существует!";
-    private final String code = "NO_SUCH_PRODUCT";
-    public NoSuchProductException(){
-        super();
+public class NoSuchProductException extends RuntimeException {
+    private final String code;
+
+    public NoSuchProductException() {
+        super("Такой товар не существует!");
+        this.code = "NO_SUCH_PRODUCT";
     }
 
-    @Override
-    public String getMessage() {
-        return message;
+    public NoSuchProductException(String message, String code) {
+        super(message);
+        this.code = code;
     }
 
     public String getCode() {
