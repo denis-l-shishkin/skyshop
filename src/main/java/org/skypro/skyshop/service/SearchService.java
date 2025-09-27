@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,6 +18,9 @@ public class SearchService {
     }
 
     public Collection<SearchResult> search(String pattern) {
+        if (pattern == null || pattern.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
         return storageService.getAllSearchableProductsAndArticles().stream()
                 .filter(searchable -> searchable.getSearchTerm().contains(pattern))
                 .map(SearchResult::fromSearchable)
