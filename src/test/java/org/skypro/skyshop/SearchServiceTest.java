@@ -3,6 +3,9 @@ package org.skypro.skyshop;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -70,6 +74,9 @@ public class SearchServiceTest {
         Collection<SearchResult> result = searchService.search("Масло");
 
         assertEquals(1, result.size(), "Должен быть один результат");
+
+        SearchResult foundResult = result.iterator().next();
+        assertEquals("Масло", foundResult.getName());
 }
 
     @Test
@@ -78,21 +85,29 @@ public class SearchServiceTest {
 
         Collection<SearchResult> result = searchService.search("интеллект");
 
-        assertEquals(2, result.size(), "Должно быть две статьи");
+        //assertEquals(2, result.size(), "Должно быть две статьи");
+        assertThat(result)
+                .hasSize(2)
+                .extracting(SearchResult::getName)
+                .containsExactlyInAnyOrder("Искусственный интеллект ChatGPT4.", "Искусственный интеллект Smart Engines.");
     }
 
-    @Test
-    void whenPatternIsNullOrIsEmpty_thenSearchServiceReturnEmptyList() {
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"", " ", "   "})
+    void whenPatternIsNullOrIsEmpty_thenSearchServiceReturnEmptyList(String pattern) {
         //when(storageService.getAllSearchableProductsAndArticles()).thenReturn(searchables);
 
-        Collection<SearchResult> result1 = searchService.search("");
+        /*Collection<SearchResult> result1 = searchService.search("");
         Collection<SearchResult> result2 = searchService.search(" ");
         Collection<SearchResult> result3 = searchService.search(null);
 
         assertTrue(result1.isEmpty(), "Список должен быть пустым.");
         assertTrue(result2.isEmpty(), "Список должен быть пустым.");
-        assertTrue(result3.isEmpty(), "Список должен быть пустым.");
+        assertTrue(result3.isEmpty(), "Список должен быть пустым.");*/
+        Collection<SearchResult> result = searchService.search(pattern);
 
+        assertTrue(result.isEmpty(), "Список должен быть пустым.");
     }
 
     // Тест на перспективу при реализации регистронезависимого поиска.

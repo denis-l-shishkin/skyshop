@@ -32,10 +32,10 @@ public class BasketServiceTest {
     @InjectMocks
     private BasketService basketService;
 
-    @BeforeEach
+    /*@BeforeEach
     void setUp() {
         basketService = new BasketService(productBasket, storageService);
-    }
+    }*/
 
     @Test
     void whenProductExist_addProductToBasket_thenProductShouldAddToBasket() {
@@ -100,7 +100,6 @@ public class BasketServiceTest {
         assertEquals(2, item1.get().getQuantity());
         assertEquals(100, item1.get().getProduct().getPrice());
 
-        // Находим масло в корзине
         Optional<BasketItem> item2 = items.stream()
                 .filter(item -> item.getProduct().getName().equals("Булка"))
                 .findFirst();
